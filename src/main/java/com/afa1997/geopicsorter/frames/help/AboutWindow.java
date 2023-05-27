@@ -23,7 +23,9 @@ public class AboutWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About GeoPicSorter");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         abt_title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         abt_title.setText("<html>\n<p style=\"font-size: 40px;\"><b style=\"color: #008000;\">Geo</b><b style=\"color: #000080;\">Pic</b><b style=\"color: #800000;\">Sorter</b></p>");

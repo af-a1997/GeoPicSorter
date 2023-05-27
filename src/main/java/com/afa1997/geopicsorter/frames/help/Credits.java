@@ -23,6 +23,7 @@ public class Credits extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Credits");
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         credits_btns_close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_close.png"))); // NOI18N
         credits_btns_close.setText("Close");

@@ -17,6 +17,7 @@ public class SortActExpl extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("What are sorting actions?");
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         jb_close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_close.png"))); // NOI18N
         jb_close.setText("Close");

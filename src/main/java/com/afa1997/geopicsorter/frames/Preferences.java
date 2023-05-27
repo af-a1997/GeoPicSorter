@@ -95,6 +95,7 @@ public class Preferences extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ShStrings.PROG_NAME + " preferences");
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         pref_jtp_gen_ttl_lang.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         pref_jtp_gen_ttl_lang.setText("Language");

@@ -4,14 +4,17 @@
   <groupId>com.afa1997</groupId>
   <artifactId>GeoPicSorter</artifactId>
   <name>GeoPicSorter</name>
-  <version>1.0.0</version>
-  <description>GeoPicSorter is a tool being coded in Java by Aldo Franquez &lt; github.com/af-a1997 &gt;, licensed under GNU AGPL 3.0.
+  <version>1.1.0</version>
+  <description>GeoPicSorter is a tool written in Java by Aldo Franquez &lt; af-a1997.github.io &gt;, licensed under GNU AGPL 3.0.
 
-Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.</description>
+Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.
+
+Home page: https://af-a1997.github.io/pages/programs/GeoPicSorter/</description>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.4.1</version>
         <executions>
           <execution>
             <goals>
@@ -31,9 +34,9 @@ Its goal is to help the user automate the process of organizing geotagged pictur
     </plugins>
   </build>
   <properties>
-    <maven.compiler.target>18</maven.compiler.target>
+    <maven.compiler.target>19</maven.compiler.target>
     <exec.mainClass>com.afa1997.geopicsorter.GeoPicSorter</exec.mainClass>
-    <maven.compiler.source>18</maven.compiler.source>
+    <maven.compiler.source>19</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

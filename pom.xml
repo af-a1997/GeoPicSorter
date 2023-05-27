@@ -4,15 +4,17 @@
     <groupId>com.afa1997</groupId>
     <artifactId>GeoPicSorter</artifactId>
     <name>GeoPicSorter</name>
-    <description>GeoPicSorter is a tool being coded in Java by Aldo Franquez &lt; github.com/af-a1997 &gt;, licensed under GNU AGPL 3.0.
+    <description>GeoPicSorter is a tool written in Java by Aldo Franquez &lt; af-a1997.github.io &gt;, licensed under GNU AGPL 3.0.
 
-Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.</description>
-    <version>1.0.0</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
+Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.
+
+Home page: https://af-a1997.github.io/pages/programs/GeoPicSorter/</description>
+    <version>1.1.0</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
         <exec.mainClass>com.afa1997.geopicsorter.GeoPicSorter</exec.mainClass>
     </properties>
     <dependencies>
@@ -27,7 +29,7 @@ Its goal is to help the user automate the process of organizing geotagged pictur
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.39.3.0</version>
+            <version>3.42.0.0</version>
         </dependency>
         
         <!-- https://square.github.io/okhttp/ -->
@@ -41,32 +43,25 @@ Its goal is to help the user automate the process of organizing geotagged pictur
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20220924</version>
+            <version>20230227</version>
         </dependency>
         
         <!-- https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>2.12.0</version>
         </dependency>
         
         <!-- https://github.com/srikanth-lingala/zip4j -->
         <dependency>
             <groupId>net.lingala.zip4j</groupId>
             <artifactId>zip4j</artifactId>
-            <version>2.11.2</version>
+            <version>2.11.5</version>
         </dependency>
         
         <!-- 
-            About each dependency's usage on GeoPicSorter:
-            
-            * metadata-extractor: necessary to get latitude and longitude from geotagged pictures.
-            * sqlite-jdbc: to store user preferences and picture details on SQLite databases.
-            * okhttp: to make requests to reverse geocoding API.
-            * org.json: used APIs return a JSON response body with names of places, this library is used to get the needed data.
-            * commons-io: used for I/O operations with pictures.
-            * zip4j: used on the last sorting action to package the unsorted pictures. I'm aware Java has its own library but it works with streams and is more complex to use, this means that the files' properties such as modification timestamps are lost. Zip4j has proven to be useful as only a line of code is needed to compress files, and the files' properties are preserved.
+            For information on each dependences' usage on GeoPicSorter, you may refer to the project's home page: < https://af-a1997.github.io/pages/programs/GeoPicSorter/ >
         -->
     </dependencies>
     
@@ -76,6 +71,7 @@ Its goal is to help the user automate the process of organizing geotagged pictur
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <goals>

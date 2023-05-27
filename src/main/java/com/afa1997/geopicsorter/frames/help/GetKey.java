@@ -18,6 +18,7 @@ public class GetKey extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("How to get your own API key");
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         jLabel1.setText("<html>\n1) To get your own API key, sign up on <u>geoapify.com</u><br>\n2) If you have an account, log-in and go to the project manager at <u>myprojects.geoapify.com</u><br>\n3) Once there, simply create a project (give it a name and confirm)<br>\n4) The project will be created with an API key, copy it and change it on the main window<br>\n5) Done!<br>");
 

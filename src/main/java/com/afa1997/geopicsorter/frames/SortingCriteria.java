@@ -3,17 +3,27 @@ package com.afa1997.geopicsorter.frames;
 // Internal:
 import com.afa1997.geopicsorter.features.ShStrings;
 
+// Logging:
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+// Swing elements:
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+
 // SQL-related imports:
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class SortingCriteria extends javax.swing.JFrame {
+// Pop-up to customize sorting process.
+public class SortingCriteria extends JFrame {
+    public static final String OUTDIR_DEF = "Chosen directory";
+    public static final String OUTDIR_OTHER = "Custom...";
     static Connection conn_settings_db;
+    static String destination_dir = "";
     
     public SortingCriteria() {
         initComponents();
@@ -36,6 +46,7 @@ public class SortingCriteria extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jbg_out_dir = new javax.swing.ButtonGroup();
         jl_title = new javax.swing.JLabel();
         jl_desc = new javax.swing.JLabel();
         jl_place_lev = new javax.swing.JLabel();
@@ -46,10 +57,16 @@ public class SortingCriteria extends javax.swing.JFrame {
         jck_date_sub_sort = new javax.swing.JCheckBox();
         jl_footnote = new javax.swing.JLabel();
         jb_custom_rgn = new javax.swing.JButton();
+        jl_outdir_desc = new javax.swing.JLabel();
+        jrb_outdir_chosen = new javax.swing.JRadioButton();
+        jrb_outdir_custom = new javax.swing.JRadioButton();
+        jb_outdir_browse = new javax.swing.JButton();
+        jtf_outdir_path = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sorting criteria");
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         jl_title.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jl_title.setText("Configure sorting criteria");
@@ -101,11 +118,37 @@ public class SortingCriteria extends javax.swing.JFrame {
         jck_date_sub_sort.setEnabled(false);
 
         jl_footnote.setForeground(new java.awt.Color(102, 102, 0));
-        jl_footnote.setText("<html>\nSorting by location&gt;date is a future planned feature, along with defining<br>\ncustom sorting criterias and sorting by block and place.");
+        jl_footnote.setText("<html>\nSome of the features are currently disabled because these will be<br>\nimplemented at a later update.");
 
         jb_custom_rgn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_crop.png"))); // NOI18N
         jb_custom_rgn.setText("Customize regions");
         jb_custom_rgn.setEnabled(false);
+
+        jl_outdir_desc.setText("Output directory:");
+
+        jbg_out_dir.add(jrb_outdir_chosen);
+        jrb_outdir_chosen.setSelected(true);
+        jrb_outdir_chosen.setText(OUTDIR_DEF);
+        jrb_outdir_chosen.setActionCommand("");
+        jrb_outdir_chosen.setEnabled(false);
+        jrb_outdir_chosen.setName("same"); // NOI18N
+
+        jbg_out_dir.add(jrb_outdir_custom);
+        jrb_outdir_custom.setText(OUTDIR_OTHER);
+        jrb_outdir_custom.setActionCommand("");
+        jrb_outdir_custom.setEnabled(false);
+        jrb_outdir_custom.setName("custom"); // NOI18N
+
+        jb_outdir_browse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_open.png"))); // NOI18N
+        jb_outdir_browse.setText("Browse...");
+        jb_outdir_browse.setEnabled(false);
+        jb_outdir_browse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_outdir_browseActionPerformed(evt);
+            }
+        });
+
+        jtf_outdir_path.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -116,24 +159,30 @@ public class SortingCriteria extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jl_footnote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 48, Short.MAX_VALUE))
+                        .addComponent(jl_place_lev)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcb_sort_crit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jck_date_sub_sort)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jb_custom_rgn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jtf_outdir_path, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jb_outdir_browse))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jl_title)
+                            .addComponent(jl_desc)
+                            .addComponent(jl_footnote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jl_place_lev)
+                                .addComponent(jl_outdir_desc)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcb_sort_crit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jl_title)
-                                    .addComponent(jl_desc))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jck_date_sub_sort)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jb_custom_rgn)))
-                        .addContainerGap())))
+                                .addComponent(jrb_outdir_chosen)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jrb_outdir_custom)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,23 +195,29 @@ public class SortingCriteria extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jl_place_lev)
                     .addComponent(jcb_sort_crit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 146, Short.MAX_VALUE)
-                        .addComponent(jl_footnote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jp_toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jb_custom_rgn)
-                            .addComponent(jck_date_sub_sort))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jb_custom_rgn)
+                    .addComponent(jck_date_sub_sort))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jl_outdir_desc)
+                    .addComponent(jrb_outdir_chosen)
+                    .addComponent(jrb_outdir_custom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtf_outdir_path, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jb_outdir_browse))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(jl_footnote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jp_toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // Save changes
+    // Save changes.
     private void jb_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_saveActionPerformed
         try {
             conn_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
@@ -186,6 +241,21 @@ public class SortingCriteria extends javax.swing.JFrame {
     private void jb_cancActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cancActionPerformed
         this.dispose();
     }//GEN-LAST:event_jb_cancActionPerformed
+
+    // If user chooses to output sorted pictures to a different folder, lets them pick it.
+    private void jb_outdir_browseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_outdir_browseActionPerformed
+        JFileChooser jfc_outdir_picker = new JFileChooser(".");
+        
+        jfc_outdir_picker.setAcceptAllFileFilterUsed(false);
+        jfc_outdir_picker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        if (jfc_outdir_picker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String sel_dir = jfc_outdir_picker.getSelectedFile().getAbsolutePath();
+            jtf_outdir_path.setText(sel_dir);
+            
+            destination_dir = sel_dir;
+        }
+    }//GEN-LAST:event_jb_outdir_browseActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -220,13 +290,19 @@ public class SortingCriteria extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jb_canc;
     private javax.swing.JButton jb_custom_rgn;
+    private javax.swing.JButton jb_outdir_browse;
     private javax.swing.JButton jb_save;
+    private javax.swing.ButtonGroup jbg_out_dir;
     private javax.swing.JComboBox<String> jcb_sort_crit;
     private javax.swing.JCheckBox jck_date_sub_sort;
     private javax.swing.JLabel jl_desc;
     private javax.swing.JLabel jl_footnote;
+    private javax.swing.JLabel jl_outdir_desc;
     private javax.swing.JLabel jl_place_lev;
     private javax.swing.JLabel jl_title;
     private javax.swing.JPanel jp_toolbar;
+    private javax.swing.JRadioButton jrb_outdir_chosen;
+    private javax.swing.JRadioButton jrb_outdir_custom;
+    private javax.swing.JTextField jtf_outdir_path;
     // End of variables declaration//GEN-END:variables
 }
