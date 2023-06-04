@@ -9,7 +9,7 @@
 Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.
 
 Home page: https://af-a1997.github.io/pages/programs/GeoPicSorter/</description>
-    <version>1.1.0</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
+    <version>1.1.1</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

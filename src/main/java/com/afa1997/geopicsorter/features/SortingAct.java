@@ -38,6 +38,7 @@ public class SortingAct {
             Statement save_loc_names = store_locations_db.createStatement();
             Statement st_get_prefs = settings_db_conn.createStatement();
             
+            // Selects pictures list and loads file handling preference.
             ResultSet rs_sel_fns = st_sel_fns.executeQuery("SELECT * FROM pictures;");
             ResultSet rs_get_prefs_sortact = st_get_prefs.executeQuery("SELECT s_value FROM settings WHERE s_key = \"sort_act\";");
             int psa_v = rs_get_prefs_sortact.getInt("s_value");

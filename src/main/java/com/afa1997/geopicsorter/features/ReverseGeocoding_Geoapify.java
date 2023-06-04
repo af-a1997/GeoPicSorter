@@ -32,6 +32,20 @@ public class ReverseGeocoding_Geoapify {
         int processed_pictures = 0;
         int total_pictures;
         List<String[]> return_locations_to_table = new ArrayList<>();
+                    
+        // Keywords related to sorting criterias, most of them are actual API body response keys (in the JSON object) but a few like [continent] aren't, they're here for ease of readability and make the logic below easier to mantain/update.
+        String org_crit_str;
+        switch (organization_criteria) {
+            case 0 -> org_crit_str = "street";
+            case 1 -> org_crit_str = "city";
+            case 2 -> org_crit_str = "state";
+            case 3 -> org_crit_str = "country";
+            case 4 -> org_crit_str = "continent";
+            default -> {
+                org_crit_str = "street";
+            }
+        }
+        System.out.println("The sorting criteria is = " + org_crit_str);
         
         try{
             store_locations_db = DriverManager.getConnection(ShStrings.METADATA_DB);
@@ -41,7 +55,11 @@ public class ReverseGeocoding_Geoapify {
             Statement st_sel_fns = store_locations_db.createStatement();
             Statement save_loc_names = store_locations_db.createStatement();
             Statement get_api_key = settings_db.createStatement();
+            
+            // Gets the list of pictures in the database.
             ResultSet rs_sel_fns = st_sel_fns.executeQuery("SELECT * FROM pictures;");
+            
+            // Gets the API key stored in the settings.
             ResultSet rs_api_key = get_api_key.executeQuery("SELECT s_value FROM settings WHERE s_key = \"api_key\";");
             geoapify_api_key = rs_api_key.getString("s_value");
             System.out.println("Using API key = " + geoapify_api_key);
@@ -72,36 +90,31 @@ public class ReverseGeocoding_Geoapify {
                     JSONObject api_response_obj = new JSONObject(api_response_to_string);
                     JSONArray api_response_arr = api_response_obj.getJSONArray("results");
                     
-                    // Keywords related to sorting criterias, most of them are actual API body response keys (in the JSON object) but a few like [continent] aren't, they're here for ease of readability and make the logic below easier to mantain (not having to compare with numbers, one of which could change associated criteria the next day).
-                    String org_crit_str;
-                    switch (organization_criteria) {
-                        case 0 -> org_crit_str = "street";
-                        case 1 -> org_crit_str = "city";
-                        case 2 -> org_crit_str = "state";
-                        case 3 -> org_crit_str = "country";
-                        case 4 -> org_crit_str = "continent";
-                        default -> {
-                            org_crit_str = "street";
-                        }
-                    }
-                    
                     if(!org_crit_str.equals("continent")){
                         // Checks if specified key in above switch/case structure exists, if so, retrieve its value.
                         if(api_response_arr.getJSONObject(0).has(org_crit_str)){
                             String location_name = api_response_arr.getJSONObject(0).getString(org_crit_str);
+                            
+                            System.out.println(location_name);
+                            
                             save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + location_name + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
 
                             return_locations_to_table.add(new String[]{rs_sel_fns.getString("filename"), rs_sel_fns.getString("latitude"), rs_sel_fns.getString("longitude"), location_name});
                         }
                         // There might be cases in which the API doesn't come with the key for the chosen criteria (for example, the JSON response body has no [street] key) so, flag such pictures as "unknown".
-                        else if(!api_response_arr.getJSONObject(0).has(org_crit_str)){
+                        else{
+                            String non_ex_var;
+                            
                             switch (org_crit_str) {
-                                case "street" -> save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + ShStrings.FOLDER_NO_STREET + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
-                                case "city" -> save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + ShStrings.FOLDER_NO_CITY + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
-                                case "state" -> save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + ShStrings.FOLDER_NO_STATE + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
-                                case "country" -> save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + ShStrings.FOLDER_NO_COUNTRY + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
-                                default -> {}
+                                case "street" -> non_ex_var = ShStrings.FOLDER_NO_STREET;
+                                case "city" -> non_ex_var = ShStrings.FOLDER_NO_CITY;
+                                case "state" -> non_ex_var = ShStrings.FOLDER_NO_STATE;
+                                case "country" -> non_ex_var = ShStrings.FOLDER_NO_COUNTRY;
+                                
+                                default -> non_ex_var = ShStrings.FOLDER_NO_STREET;
                             }
+                            
+                            save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + non_ex_var + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
 
                             return_locations_to_table.add(new String[]{rs_sel_fns.getString("filename"), rs_sel_fns.getString("latitude"), rs_sel_fns.getString("longitude"), "--"});
                         }
