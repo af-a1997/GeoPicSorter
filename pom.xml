@@ -9,51 +9,40 @@
 Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.
 
 Home page: https://af-a1997.github.io/pages/programs/GeoPicSorter/</description>
-    <version>1.1.1</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
+    <version>1.2.0</version> <!-- Version of GeoPicSorter: x.y.z ; where: x = major release, y = minor release, z = hotfix -->
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <exec.mainClass>com.afa1997.geopicsorter.GeoPicSorter</exec.mainClass>
     </properties>
     <dependencies>
-        <!-- https://github.com/drewnoakes/metadata-extractor -->
         <dependency>
             <groupId>com.drewnoakes</groupId>
             <artifactId>metadata-extractor</artifactId>
             <version>2.18.0</version>
         </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.42.0.0</version>
         </dependency>
-        
-        <!-- https://square.github.io/okhttp/ -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.10.0</version>
+            <version>4.11.0</version>
         </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20230227</version>
         </dependency>
-        
-        <!-- https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.12.0</version>
         </dependency>
-        
-        <!-- https://github.com/srikanth-lingala/zip4j -->
         <dependency>
             <groupId>net.lingala.zip4j</groupId>
             <artifactId>zip4j</artifactId>

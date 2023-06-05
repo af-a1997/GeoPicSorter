@@ -17,7 +17,7 @@ Refer to the TODOs project for more details on the list of missing features to b
 ***GeoPicSorter*** currently detects only `.jpg` and `.jpeg` files, conducting tests with other formats that support geotags in one way or another is planned.
 
 ### :white_check_mark: Tested on
-> :information_source: ***GeoPicSorter*** is known to work on the following OSes and versions, it may not work as intended on other OSes. Please note Java SE is required to run the program.
+> :information_source: ***GeoPicSorter*** has been tested to work on the following OSes and architectures.
 
 * Windows 10 x64.
 

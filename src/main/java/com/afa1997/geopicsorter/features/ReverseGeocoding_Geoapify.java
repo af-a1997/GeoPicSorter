@@ -35,15 +35,25 @@ public class ReverseGeocoding_Geoapify {
                     
         // Keywords related to sorting criterias, most of them are actual API body response keys (in the JSON object) but a few like [continent] aren't, they're here for ease of readability and make the logic below easier to mantain/update.
         String org_crit_str;
-        switch (organization_criteria) {
-            case 0 -> org_crit_str = "street";
-            case 1 -> org_crit_str = "city";
-            case 2 -> org_crit_str = "state";
-            case 3 -> org_crit_str = "country";
-            case 4 -> org_crit_str = "continent";
-            default -> {
+        switch (organization_criteria){
+            case 0:
                 org_crit_str = "street";
-            }
+                break;
+            case 1:
+                org_crit_str = "city";
+                break;
+            case 2:
+                org_crit_str = "state";
+                break;
+            case 3:
+                org_crit_str = "country";
+                break;
+            case 4:
+                org_crit_str = "continent";
+                break;
+                
+            default:
+                org_crit_str = "street";
         }
         System.out.println("The sorting criteria is = " + org_crit_str);
         
@@ -105,13 +115,22 @@ public class ReverseGeocoding_Geoapify {
                         else{
                             String non_ex_var;
                             
-                            switch (org_crit_str) {
-                                case "street" -> non_ex_var = ShStrings.FOLDER_NO_STREET;
-                                case "city" -> non_ex_var = ShStrings.FOLDER_NO_CITY;
-                                case "state" -> non_ex_var = ShStrings.FOLDER_NO_STATE;
-                                case "country" -> non_ex_var = ShStrings.FOLDER_NO_COUNTRY;
-                                
-                                default -> non_ex_var = ShStrings.FOLDER_NO_STREET;
+                            switch(org_crit_str){
+                                case "street":
+                                    non_ex_var = ShStrings.FOLDER_NO_STREET;
+                                    break;
+                                case "city":
+                                    non_ex_var = ShStrings.FOLDER_NO_CITY;
+                                    break;
+                                case "state":
+                                    non_ex_var = ShStrings.FOLDER_NO_STATE;
+                                    break;
+                                case "country":
+                                    non_ex_var = ShStrings.FOLDER_NO_COUNTRY;
+                                    break;
+                                    
+                                default:
+                                    non_ex_var = ShStrings.FOLDER_NO_CITY;
                             }
                             
                             save_loc_names.addBatch("UPDATE pictures SET location_name = \"" + non_ex_var + "\" WHERE id = " + rs_sel_fns.getString("id") + ";");
