@@ -6,7 +6,7 @@ public class ShStrings {
     
     // Project related values.
     public static final String PROG_NAME = "GeoPicSorter";
-    public static final String PROG_VER = "1.2.1";
+    public static final String PROG_VER = "1.2.2";
     public static final String PROG_NAME_FULL = PROG_NAME + " " + PROG_VER;
     public static final String REPO_LOC = "https://github.com/af-a1997/GeoPicSorter";
     

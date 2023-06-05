@@ -4,7 +4,7 @@
   <groupId>com.afa1997</groupId>
   <artifactId>GeoPicSorter</artifactId>
   <name>GeoPicSorter</name>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <description>GeoPicSorter is a tool written in Java by Aldo Franquez &lt; af-a1997.github.io &gt;, licensed under GNU AGPL 3.0.
 
 Its goal is to help the user automate the process of organizing geotagged pictures based on groups of locations such as streets, cities, etc.

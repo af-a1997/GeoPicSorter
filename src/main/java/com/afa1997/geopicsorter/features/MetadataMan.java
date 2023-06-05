@@ -11,6 +11,7 @@ import java.sql.SQLException;
 // Metadata-extractor, used to get the latitude and longitude info from the pictures:
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
+import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
 
@@ -177,20 +178,26 @@ public class MetadataMan {
             Statement st_upd_loc = store_locations_db.createStatement();
             
             // Try to get latitude and longitude for each picture, and writes them into the database if appliable.
+            String lat = "";
+            String lng = "";
+            
             while(rs_sel_fns.next()){
 		try {
-                    String lat, lng;
                     
                     //File current_picture = new File(pictures_location + rs_sel_fns.getString("filename"));
                     File current_picture = new File(rs_sel_fns.getString("location") + rs_sel_fns.getString("filename"));
 		    md = ImageMetadataReader.readMetadata(current_picture);
                     
-                    GpsDirectory addr = md.getFirstDirectoryOfType(GpsDirectory.class);
-                    
                     // If there's geolocation data, retrieve it:
-                    if(addr != null){
-                        lat = String.valueOf(addr.getGeoLocation().getLatitude());
-                        lng = String.valueOf(addr.getGeoLocation().getLongitude());
+                    if(md.containsDirectoryOfType(GpsDirectory.class)){
+                        GpsDirectory addr = md.getFirstDirectoryOfType(GpsDirectory.class);
+                        
+                        if(addr.containsTag(GpsDirectory.TAG_LATITUDE) && addr.containsTag(GpsDirectory.TAG_LONGITUDE)){
+                            GeoLocation gl_data = addr.getGeoLocation();
+
+                            lat = String.valueOf(gl_data.getLatitude());
+                            lng = String.valueOf(gl_data.getLongitude());
+                        }
                     }
                     // Otherwise, send an empty string to indicate the picture has no coordinates registered:
                     else{
