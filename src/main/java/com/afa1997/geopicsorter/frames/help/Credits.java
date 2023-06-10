@@ -76,7 +76,7 @@ public class Credits extends javax.swing.JFrame {
         credits_tab_ext_list.setColumns(20);
         credits_tab_ext_list.setForeground(new java.awt.Color(255, 255, 255));
         credits_tab_ext_list.setRows(5);
-        credits_tab_ext_list.setText("Geoapify Geocoding API <https://www.geoapify.com/>\nGoogle Maps Geocoding API <https://developers.google.com/maps/documentation/geocoding/start#reverse>\nMetadata-extractor <https://github.com/drewnoakes/metadata-extractor>\nJDBC <https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc>\nOkHttp <https://square.github.io/okhttp/>\norg.json <https://mvnrepository.com/artifact/org.json/json>\nApache Commons <https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar>\nzip4j <https://github.com/srikanth-lingala/zip4j>");
+        credits_tab_ext_list.setText("Geoapify Reverse Geocoding API <https://www.geoapify.com/reverse-geocoding-api>\nLocationIQ <https://docs.locationiq.com/#reverse-geocoding>\nMetadata-extractor <https://github.com/drewnoakes/metadata-extractor>\nJDBC <https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc>\nOkHttp <https://square.github.io/okhttp/>\norg.json <https://mvnrepository.com/artifact/org.json/json>\nApache Commons <https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar>\nzip4j <https://github.com/srikanth-lingala/zip4j>");
         credits_tab_ext_cont.setViewportView(credits_tab_ext_list);
 
         javax.swing.GroupLayout credits_tab_extLayout = new javax.swing.GroupLayout(credits_tab_ext);

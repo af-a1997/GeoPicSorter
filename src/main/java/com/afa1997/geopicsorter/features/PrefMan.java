@@ -53,6 +53,7 @@ public class PrefMan {
         default_settings_gen.add(new String[]{"sub_by_date", "false"});
         default_settings_gen.add(new String[]{"last_work_dir", "."});
         default_settings_gen.add(new String[]{"keep_last_work_dir", "true"});
+        default_settings_gen.add(new String[]{"output_dir", null});
     }
     
     // Used when creating settings file for the first time or re-creating it in case of damage/deletion.

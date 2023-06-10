@@ -1,6 +1,7 @@
 package com.afa1997.geopicsorter.frames;
 
 // Internals:
+import com.afa1997.geopicsorter.features.MetadataMan;
 import com.afa1997.geopicsorter.features.ShStrings;
 import com.afa1997.geopicsorter.frames.help.AboutWindow;
 import com.afa1997.geopicsorter.frames.help.GetKey;
@@ -28,33 +29,9 @@ import java.io.IOException;
 // Main window, used to start interacting with GeoPicSorter, accessing preferences, etc.
 public class MainWindow extends JFrame {
     static Connection conn_to_settings_db;
-    String curr_api_key = new String();
     
     public MainWindow() {
         initComponents();
-        
-        // Get and display currently used API key on the input field.
-        try{
-            conn_to_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
-            
-            Statement st_last_dir = conn_to_settings_db.createStatement();
-            
-            ResultSet rs_last_dir = st_last_dir.executeQuery("SELECT s_value FROM settings WHERE s_key = \"api_key\";");
-            
-            curr_api_key = rs_last_dir.getString("s_value");
-            
-            mw_txf_api_key_in.setText(curr_api_key);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            try {
-                conn_to_settings_db.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
     
     @SuppressWarnings("unchecked")
@@ -65,9 +42,8 @@ public class MainWindow extends JFrame {
         mw_intro_text = new javax.swing.JLabel();
         mw_sec_api_key_ttl = new javax.swing.JLabel();
         mw_sec_api_key_body = new javax.swing.JLabel();
-        mw_txf_api_key_in = new javax.swing.JTextField();
-        mw_btn_use_api_key = new javax.swing.JButton();
-        mw_btn_help_get_api_key = new javax.swing.JButton();
+        mw_sec_api_key_foot = new javax.swing.JLabel();
+        mw_btn_prefs = new javax.swing.JButton();
         mw_mb = new javax.swing.JMenuBar();
         mw_mb_program = new javax.swing.JMenu();
         mw_mb_program_open = new javax.swing.JMenu();
@@ -96,25 +72,16 @@ public class MainWindow extends JFrame {
         mw_sec_api_key_ttl.setForeground(new java.awt.Color(204, 153, 0));
         mw_sec_api_key_ttl.setText("Important!");
 
-        mw_sec_api_key_body.setText("<html>\nBefore using the tool, please consider signing up to Geoapify and supply your own API key.<br>\nWhile <b style=\"color: #008000;\">Geo</b><b style=\"color: #000080;\">Pic</b><b style=\"color: #800000;\">Sorter</b> does come with its own key, it's a free one meant for quick access,<br>\ntherefore, it'll use up the key's daily free quota and prevent others from using the program.<br>\nBut don't worry, getting a key is free. Check below on quick instructions to get started.");
+        mw_sec_api_key_body.setText("<html>\nBefore using the tool, please consider signing up to Geoapify and supply your own API key.<br>\n<b style=\"color: #008000;\">Geo</b><b style=\"color: #000080;\">Pic</b><b style=\"color: #800000;\">Sorter</b> is supplied with a key for quick access/testing, and in the event more than<br>\none user makes use of it, there'll likely be unexpected issues.<br>");
         mw_sec_api_key_body.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        mw_txf_api_key_in.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        mw_txf_api_key_in.setForeground(new java.awt.Color(102, 102, 0));
+        mw_sec_api_key_foot.setText("<html>\nGetting a key for yourself is easy, and is free.\n<br><br>\nFor instructions and/or changing the key, see:");
 
-        mw_btn_use_api_key.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_refresh.png"))); // NOI18N
-        mw_btn_use_api_key.setText("Use this key");
-        mw_btn_use_api_key.addActionListener(new java.awt.event.ActionListener() {
+        mw_btn_prefs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/gnome-settings.png"))); // NOI18N
+        mw_btn_prefs.setText("Preferences");
+        mw_btn_prefs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mw_btn_use_api_keyActionPerformed(evt);
-            }
-        });
-
-        mw_btn_help_get_api_key.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_help.png"))); // NOI18N
-        mw_btn_help_get_api_key.setText("How to get a key");
-        mw_btn_help_get_api_key.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mw_btn_help_get_api_keyActionPerformed(evt);
+                mw_btn_prefsActionPerformed(evt);
             }
         });
 
@@ -128,11 +95,10 @@ public class MainWindow extends JFrame {
                     .addComponent(mw_intro_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(mw_sec_api_key_ttl)
                     .addComponent(mw_sec_api_key_body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(mw_txf_api_key_in, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mw_jp_containerLayout.createSequentialGroup()
-                        .addComponent(mw_btn_use_api_key)
+                        .addComponent(mw_sec_api_key_foot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mw_btn_help_get_api_key)))
+                        .addComponent(mw_btn_prefs)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         mw_jp_containerLayout.setVerticalGroup(
@@ -141,16 +107,15 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addComponent(mw_intro_text, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mw_sec_api_key_ttl)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mw_sec_api_key_body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mw_txf_api_key_in, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(mw_jp_containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mw_btn_use_api_key)
-                    .addComponent(mw_btn_help_get_api_key))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGroup(mw_jp_containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(mw_jp_containerLayout.createSequentialGroup()
+                        .addComponent(mw_sec_api_key_ttl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(mw_sec_api_key_body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(mw_sec_api_key_foot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mw_btn_prefs))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         mw_mb_program.setMnemonic(0);
@@ -306,34 +271,55 @@ public class MainWindow extends JFrame {
         // Open a file chooser, if a folder was selected, then do what's on the first part, otherwise do nothing.
         if (jfc_folder.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
             String sel_dir = jfc_folder.getSelectedFile().getAbsolutePath();
-            SorterProcess srt_prc = new SorterProcess(sel_dir);
             
-            // Save last work dir if the setting to remember working directory is true, otherwise does nothing.
-            try{
-                conn_to_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
+            try {
+                MetadataMan mm_i = new MetadataMan(true);
+                
+                // Get picture file names and put them into the locations database.
+                mm_i.MMIF_WriteFileNames(sel_dir);
+                
+                // Attempt to get coordinates from the pictures in this folder.
+                int mm_gps_locs = mm_i.MMIF_GetCoords(sel_dir);
+                
+                // If there are no geotagged pictures, return a message and don't open sorting process window.
+                if(mm_gps_locs == 0){
+                    JFrame warn_no_geotags = new JFrame();
+                    
+                    JOptionPane.showMessageDialog(warn_no_geotags, "This folder doesn't contain any geotagged pictures, please try another folder.", "No geotagged pictures found", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    SorterProcess srt_prc = new SorterProcess(sel_dir);
 
-                Statement st_save_last_dir = conn_to_settings_db.createStatement();
-                Statement st_get_last_dir_status = conn_to_settings_db.createStatement();
-                ResultSet get_remember_dir_pref = st_get_last_dir_status.executeQuery("SELECT s_value FROM settings WHERE s_key = \"keep_last_work_dir\";");
-                System.out.println("Remembering directory = " + Boolean.valueOf(get_remember_dir_pref.getString("s_value")));
-                
-                if(Boolean.parseBoolean(get_remember_dir_pref.getString("s_value")))
-                    st_save_last_dir.executeUpdate("UPDATE settings SET s_value = \"" + sel_dir + "\" WHERE s_key = \"last_work_dir\";");
-                
-                conn_to_settings_db.close();
-            } catch (SQLException ex) {
+                    // Save last work directory address if the setting to remember it is set to true, otherwise this does nothing.
+                    try{
+                        conn_to_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
+
+                        Statement st_save_last_dir = conn_to_settings_db.createStatement();
+                        Statement st_get_last_dir_status = conn_to_settings_db.createStatement();
+                        ResultSet get_remember_dir_pref = st_get_last_dir_status.executeQuery("SELECT s_value FROM settings WHERE s_key = \"keep_last_work_dir\";");
+
+                        if(Boolean.parseBoolean(get_remember_dir_pref.getString("s_value")))
+                            st_save_last_dir.executeUpdate("UPDATE settings SET s_value = \"" + sel_dir + "\" WHERE s_key = \"last_work_dir\";");
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    finally{
+                        try {
+                            conn_to_settings_db.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    srt_prc.setVisible(true);
+
+                    // TODO: this approach keeps the main window disabled after opening the sorting process, and we don't want this... it should be available again when closing the sorter process window.
+                    //this.setEnabled(false);
+                }
+            } catch (SQLException | IOException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("Selected folder: " + sel_dir);
-            
-            srt_prc.setVisible(true);
-            
-            // TODO: this approach keeps the main window disabled after opening the sorting process, and we don't want this... it should be available again when closing the sorter process window.
-            //this.setEnabled(false);
-        }
-        else {
-            System.out.println("No folder has been selected.");
         }
     }//GEN-LAST:event_mw_mb_program_open_folderActionPerformed
 
@@ -347,43 +333,10 @@ public class MainWindow extends JFrame {
         new Preferences().setVisible(true);
     }//GEN-LAST:event_mw_mb_edit_prefsActionPerformed
 
-    // Explain in a new window how to get an API key.
-    private void mw_btn_help_get_api_keyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mw_btn_help_get_api_keyActionPerformed
-        new GetKey().setVisible(true);
-    }//GEN-LAST:event_mw_btn_help_get_api_keyActionPerformed
-
-    // Store the API key on the settings database.
-    private void mw_btn_use_api_keyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mw_btn_use_api_keyActionPerformed
-        String new_api_key = mw_txf_api_key_in.getText();
-        JFrame jf_api_key_st = new JFrame();
-        
-        // Basic validation, but because editing API key isn't a permanent feature, there's no plans to expand it more than necessary.
-        if(!new_api_key.isEmpty() && !new_api_key.equals(curr_api_key)){
-            try{
-                conn_to_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
-
-                Statement st_api_key = conn_to_settings_db.createStatement();
-
-                st_api_key.executeUpdate("UPDATE settings SET s_value = \"" + new_api_key + "\" WHERE s_key = \"api_key\";");
-                
-                JOptionPane.showMessageDialog(jf_api_key_st, "Key <" + new_api_key + "> has been saved.", "API key has been saved", JOptionPane.INFORMATION_MESSAGE);
-            }
-            catch(SQLException sql_ex){
-                sql_ex.getMessage();
-            }
-            finally{
-                try {
-                    conn_to_settings_db.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        else if(!new_api_key.isEmpty() && new_api_key.equals(curr_api_key))
-            JOptionPane.showMessageDialog(jf_api_key_st, "You're already using this API key", "API key change not saved", JOptionPane.ERROR_MESSAGE);
-        else if(new_api_key.isEmpty())
-            JOptionPane.showMessageDialog(jf_api_key_st, "No API key was provided", "Empty API key field", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_mw_btn_use_api_keyActionPerformed
+    // Button at the home screen to open preferences.
+    private void mw_btn_prefsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mw_btn_prefsActionPerformed
+        new Preferences().setVisible(true);
+    }//GEN-LAST:event_mw_btn_prefsActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -416,8 +369,7 @@ public class MainWindow extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton mw_btn_help_get_api_key;
-    private javax.swing.JButton mw_btn_use_api_key;
+    private javax.swing.JButton mw_btn_prefs;
     private javax.swing.JLabel mw_intro_text;
     private javax.swing.JPanel mw_jp_container;
     private javax.swing.JMenuBar mw_mb;
@@ -436,7 +388,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem mw_mb_program_quit;
     private javax.swing.JPopupMenu.Separator mw_mb_program_sep0;
     private javax.swing.JLabel mw_sec_api_key_body;
+    private javax.swing.JLabel mw_sec_api_key_foot;
     private javax.swing.JLabel mw_sec_api_key_ttl;
-    private javax.swing.JTextField mw_txf_api_key_in;
     // End of variables declaration//GEN-END:variables
 }

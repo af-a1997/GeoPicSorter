@@ -186,11 +186,10 @@
                       <Component id="mw_intro_text" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="mw_sec_api_key_ttl" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="mw_sec_api_key_body" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="mw_txf_api_key_in" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="mw_btn_use_api_key" min="-2" max="-2" attributes="0"/>
+                          <Component id="mw_sec_api_key_foot" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="mw_btn_help_get_api_key" min="-2" max="-2" attributes="0"/>
+                          <Component id="mw_btn_prefs" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="17" max="32767" attributes="0"/>
@@ -203,17 +202,17 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="mw_intro_text" min="-2" pref="187" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="mw_sec_api_key_ttl" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="mw_sec_api_key_body" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="mw_txf_api_key_in" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="mw_btn_use_api_key" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="mw_btn_help_get_api_key" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="mw_sec_api_key_ttl" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="mw_sec_api_key_body" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="mw_sec_api_key_foot" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="mw_btn_prefs" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="18" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -238,40 +237,24 @@
         </Component>
         <Component class="javax.swing.JLabel" name="mw_sec_api_key_body">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Before using the tool, please consider signing up to Geoapify and supply your own API key.&lt;br&gt;&#xa;While &lt;b style=&quot;color: #008000;&quot;&gt;Geo&lt;/b&gt;&lt;b style=&quot;color: #000080;&quot;&gt;Pic&lt;/b&gt;&lt;b style=&quot;color: #800000;&quot;&gt;Sorter&lt;/b&gt; does come with its own key, it&apos;s a free one meant for quick access,&lt;br&gt;&#xa;therefore, it&apos;ll use up the key&apos;s daily free quota and prevent others from using the program.&lt;br&gt;&#xa;But don&apos;t worry, getting a key is free. Check below on quick instructions to get started."/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Before using the tool, please consider signing up to Geoapify and supply your own API key.&lt;br&gt;&#xa;&lt;b style=&quot;color: #008000;&quot;&gt;Geo&lt;/b&gt;&lt;b style=&quot;color: #000080;&quot;&gt;Pic&lt;/b&gt;&lt;b style=&quot;color: #800000;&quot;&gt;Sorter&lt;/b&gt; is supplied with a key for quick access/testing, and in the event more than&lt;br&gt;&#xa;one user makes use of it, there&apos;ll likely be unexpected issues.&lt;br&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="mw_txf_api_key_in">
+        <Component class="javax.swing.JLabel" name="mw_sec_api_key_foot">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Courier New" size="12" style="0"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="66" red="66" type="rgb"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Getting a key for yourself is easy, and is free.&#xa;&lt;br&gt;&lt;br&gt;&#xa;For instructions and/or changing the key, see:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="mw_btn_use_api_key">
+        <Component class="javax.swing.JButton" name="mw_btn_prefs">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/icons/stock_refresh.png"/>
+              <Image iconType="3" name="/icons/gnome-settings.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Use this key"/>
+            <Property name="text" type="java.lang.String" value="Preferences"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mw_btn_use_api_keyActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="mw_btn_help_get_api_key">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/icons/stock_help.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="How to get a key"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mw_btn_help_get_api_keyActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mw_btn_prefsActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

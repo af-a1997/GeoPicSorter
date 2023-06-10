@@ -8,9 +8,9 @@ The program works with various open source third-party tools and a [reverse geoc
 Read the next section for some important notes regarding the program's functionality.
 
 ## :warning: Important
-This is the **first** public release of ***GeoPicSorter*** and is early on development, as such, there's a lot of things to be done in order to improve functionality and stability, implement new features, add visual feedback for picture sorting, etc.
+***GeoPicSorter*** is early on development, and because of this, there's a lot of things to be done in order to improve its functionality and stability, implement new features, add visual feedback for picture sorting, etc.
 
-Most notoriously, you're limited by the number of daily requests you can make with a free key and require of a stable internet connectivity, you also don't have a visual display of the progress while the program is working on sorting pictures.
+Most notoriously, you're limited by the number of daily requests you can make with a free key, and require of a stable internet connection, you also don't have a visual display of the progress while the program is working on sorting pictures, **which makes it look like its frozen while it's actually working in the background**.
 
 Refer to the TODOs project for more details on the list of missing features to be added, I welcome suggestions and contributions, of course.
 

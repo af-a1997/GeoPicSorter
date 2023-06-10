@@ -6,12 +6,13 @@ public class ShStrings {
     
     // Project related values.
     public static final String PROG_NAME = "GeoPicSorter";
-    public static final String PROG_VER = "1.2.2";
+    public static final String PROG_VER = "1.3.0";
     public static final String PROG_NAME_FULL = PROG_NAME + " " + PROG_VER;
     public static final String REPO_LOC = "https://github.com/af-a1997/GeoPicSorter";
     
     // Sorting status messsages.
-    public static final String SORTING_STATUS_IDLE = "Not started";
+    public static final String SORTING_STATUS_IDLE = " picture(s) have been detected. Awaiting start.";
+    public static final String SORTING_STATUS_IDLE_SHORT = "Awaiting start";
     public static final String SORTING_STATUS_NO_PICS = "No pictures detected in this folder";
     public static final String SORTING_STATUS_DETECTING = "Detecting pictures...";
     public static final String SORTING_STATUS_FETCH_GEOTAGS = "Fetching geolocation data...";

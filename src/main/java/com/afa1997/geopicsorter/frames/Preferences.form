@@ -197,8 +197,12 @@
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="pref_org_jb_help_get_api_key" alignment="1" min="-2" max="-2" attributes="0"/>
                                           <Component id="pref_org_jb_help_sortact" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="pref_org_jb_help_paste_api_key" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="pref_org_jb_help_get_api_key" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
                               </Group>
@@ -222,7 +226,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pref_org_txf_api_key_in" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pref_org_jb_help_get_api_key" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="pref_org_jb_help_get_api_key" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="pref_org_jb_help_paste_api_key" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pref_org_ttl_sortact" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -320,6 +327,17 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pref_org_jb_help_get_api_keyActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="pref_org_jb_help_paste_api_key">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/icons/stock_paste.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Paste key"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pref_org_jb_help_paste_api_keyActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

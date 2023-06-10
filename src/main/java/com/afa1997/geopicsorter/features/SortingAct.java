@@ -41,6 +41,7 @@ public class SortingAct {
             // Selects pictures list and loads file handling preference.
             ResultSet rs_sel_fns = st_sel_fns.executeQuery("SELECT * FROM pictures;");
             ResultSet rs_get_prefs_sortact = st_get_prefs.executeQuery("SELECT s_value FROM settings WHERE s_key = \"sort_act\";");
+            
             int psa_v = rs_get_prefs_sortact.getInt("s_value");
             
             while(rs_sel_fns.next()){
@@ -48,7 +49,8 @@ public class SortingAct {
                 if(orig_dir == null)
                     orig_dir = ShStrings.FOLDER_NO_GEOTAG;
                 
-                File dest_dir = new File(orig_dir + rs_sel_fns.getString("location_name"));
+                //File dest_dir = new File(output_location);
+                File dest_dir = new File(output_location + "\\" + rs_sel_fns.getString("location_name"));
                 File origin_pict = new File(orig_dir + rs_sel_fns.getString("filename"));
                 File destination = new File(dest_dir + "\\" + rs_sel_fns.getString("filename"));
                 

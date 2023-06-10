@@ -2,7 +2,6 @@ package com.afa1997.geopicsorter.frames;
 
 // Internals:
 import com.afa1997.geopicsorter.features.ShStrings;
-import com.afa1997.geopicsorter.features.MetadataMan;
 import com.afa1997.geopicsorter.features.ReverseGeocoding_Geoapify;
 import com.afa1997.geopicsorter.features.SortingAct;
 
@@ -15,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 // Java utils:
 import java.util.List;
@@ -26,57 +26,18 @@ import javax.swing.table.DefaultTableModel;
 
 // UI class that handles the base of the picture sorting process and calls the other actions in order.
 public class SorterProcess extends javax.swing.JFrame {
-    Connection conn_settings_db;
     String retrieve_location = "";
-    
-    int org_crit_v = 0;
+    String original_location = "";
     
     public SorterProcess() {
         initComponents();
-        
-        try {
-            conn_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
-            
-            Statement get_org_crit_v = conn_settings_db.createStatement();
-            ResultSet rtn_org_crit_v = get_org_crit_v.executeQuery("SELECT * FROM settings WHERE s_key = \"organization_criteria\";");
-            
-            org_crit_v = rtn_org_crit_v.getInt("s_value");
-        } catch (SQLException ex) {
-            Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            try {
-                conn_settings_db.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
     
     public SorterProcess(String loc_whole_folder){
         initComponents();
         
-        try {
-            conn_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
-            
-            Statement get_org_crit_v = conn_settings_db.createStatement();
-            ResultSet rtn_org_crit_v = get_org_crit_v.executeQuery("SELECT * FROM settings WHERE s_key = \"organization_criteria\";");
-            
-            org_crit_v = rtn_org_crit_v.getInt("s_value");
-        } catch (SQLException ex) {
-            Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
-            try {
-                conn_settings_db.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
         retrieve_location = loc_whole_folder;
-        
-        System.out.println("Selected location with pictures: " + retrieve_location);
+        original_location = loc_whole_folder;
     }
 
     @SuppressWarnings("unchecked")
@@ -196,7 +157,7 @@ public class SorterProcess extends javax.swing.JFrame {
 
         status_indicator.setText(ShStrings.SORTING_STATUS_IDLE);
 
-        status_visual.setString(ShStrings.SORTING_STATUS_IDLE);
+        status_visual.setString(ShStrings.SORTING_STATUS_IDLE_SHORT);
         status_visual.setStringPainted(true);
 
         javax.swing.GroupLayout status_barLayout = new javax.swing.GroupLayout(status_bar);
@@ -250,18 +211,31 @@ public class SorterProcess extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jt_close_sorter_windowActionPerformed
 
-    // When the window is opened, proceeds to populate the database with the picture names and location data for each picture, before the reverse geocoding process.
+    // When the window is opened, populates table with filenames and coordinates of each detected picture.
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        List<String> mm_wt_fns;
-        
-        status_indicator.setText(ShStrings.SORTING_STATUS_DETECTING);
+        Connection conn_to_get_filenames = null;
+        Connection settings_db = null;
         
         try {
-            MetadataMan mm_i = new MetadataMan(true);
+            conn_to_get_filenames = DriverManager.getConnection(ShStrings.METADATA_DB);
+            settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
             
-            // Get file names to add them to the list.
-            mm_wt_fns = mm_i.MMIF_WriteFileNames(retrieve_location);
-
+            Statement st_get_filenames = conn_to_get_filenames.createStatement();
+            Statement st_set_outdir = settings_db.createStatement();
+            
+            ResultSet rs_list_of_names = st_get_filenames.executeQuery("SELECT filename, latitude, longitude FROM pictures;");
+            
+            // Stores the output location of the sorted pictures in the preferences database.
+            st_set_outdir.executeUpdate("UPDATE settings SET s_value = \"" + retrieve_location + "\" WHERE s_key = \"output_dir\";");
+            
+            // List of information to show at the table when the window is opened.
+            List<String[]> mm_wt_fns = new ArrayList<>();
+            while(rs_list_of_names.next()){
+                mm_wt_fns.add(new String[]{rs_list_of_names.getString("filename"), rs_list_of_names.getString("latitude"), rs_list_of_names.getString("longitude")});
+            }
+        
+            status_indicator.setText(ShStrings.SORTING_STATUS_DETECTING);
+        
             // Creates an object that will contain the list of file names, which is then used to populate the table. Also makes the cells non-editable.
             DefaultTableModel dtm_pictures_list = new DefaultTableModel(){
                 @Override
@@ -270,37 +244,43 @@ public class SorterProcess extends javax.swing.JFrame {
                 }
             };
             
+            // Sets the model of the table to the one declared just above.
             pictures_listing.setModel(dtm_pictures_list);
             
+            // Table column headings.
             dtm_pictures_list.setColumnIdentifiers(ShStrings.SORTER_TBL_HEADINGS);
             
             // Creates an object for each file, all of them will have a row.
-            for(String mm_l : mm_wt_fns){
-                Object[] obj_pictures_list = new Object[1];
+            for(String[] mm_l : mm_wt_fns){
+                Object[] obj_pictures_list = new Object[3];
                 
-                obj_pictures_list[0] = mm_l;
+                obj_pictures_list[0] = mm_l[0];
+                obj_pictures_list[1] = mm_l[1];
+                obj_pictures_list[2] = mm_l[2];
                 
                 dtm_pictures_list.addRow(obj_pictures_list);
             }
             
-            status_indicator.setText(ShStrings.SORTING_STATUS_IDLE);
-        } catch (SQLException | IOException ex) {
+            // Tells the user how many pictures were detected in the status bar.
+            status_indicator.setText(mm_wt_fns.size() + ShStrings.SORTING_STATUS_IDLE);
+        } catch (SQLException ex) {
             Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            try {
+                conn_to_get_filenames.close();
+                settings_db.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_formWindowOpened
 
     // When the user clicks the [Start] button, begins sorting process.
     private void jt_start_sortingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jt_start_sortingActionPerformed
         try {
-            // Disables the button to prevent running the sorting process again, specially useful to prevent possible issues if the pictures were moved to the sub-folders.
+            // Disables the [Start] button to prevent running the sorting process again, specially useful to prevent possible issues if the pictures were moved to the sub-folders.
             jt_start_sorting.setEnabled(false);
-            
-            // Tries to get latitude and longitude metadata from all loaded pictures, and shows it on the table.
-            MetadataMan mm_i = new MetadataMan(false);
-        
-            status_indicator.setText(ShStrings.SORTING_STATUS_FETCH_GEOTAGS);
-            
-            List<String[]> mm_gps_locs = mm_i.MMIF_GetCoords(retrieve_location);
             
             DefaultTableModel dtm_pictures_list = new DefaultTableModel(){
                 @Override
@@ -312,24 +292,11 @@ public class SorterProcess extends javax.swing.JFrame {
             pictures_listing.setModel(dtm_pictures_list);
             
             dtm_pictures_list.setColumnIdentifiers(ShStrings.SORTER_TBL_HEADINGS);
-            dtm_pictures_list.setRowCount(0);
-            
-            for(String[] mm_l : mm_gps_locs){
-                Object[] obj_pictures_list = new Object[3];
-                
-                obj_pictures_list[0] = mm_l[0];
-                obj_pictures_list[1] = mm_l[1];
-                obj_pictures_list[2] = mm_l[2];
-                
-                dtm_pictures_list.addRow(obj_pictures_list);
-            }
         
             status_indicator.setText(ShStrings.SORTING_STATUS_RG_WORKING);
             
             // Make requests to API in order to retrieve location names, and stores them onto database, then display them on the table.
-            ReverseGeocoding_Geoapify rg_src0 = new ReverseGeocoding_Geoapify();
-            
-            List<String[]> final_table = rg_src0.RG_SRC0_GetLocNames(org_crit_v);
+            List<String[]> final_table = new ReverseGeocoding_Geoapify().RG_SRC0_GetLocNames();
             dtm_pictures_list.setRowCount(0);
             for(String[] final_table_recreation : final_table){
                 Object[] obj_pictures_list = new Object[4];
@@ -346,8 +313,20 @@ public class SorterProcess extends javax.swing.JFrame {
             
             // Begins sorting process.
             try {
+                Connection settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
+                
+                Statement st_retrieve_location = settings_db.createStatement();
+                
+                ResultSet rs_retrieve_location = st_retrieve_location.executeQuery("SELECT s_value FROM settings WHERE s_key = \"output_dir\";");
+                
+                // Gets the output directory from the DB, because the user may pick a different directory than the one at which the pictures are located.
+                if(rs_retrieve_location.getString("s_value") != null && !rs_retrieve_location.getString("s_value").equals(retrieve_location))
+                    retrieve_location = rs_retrieve_location.getString("s_value");
+                else if(rs_retrieve_location.getString("s_value") == null)
+                    retrieve_location = original_location;
+                
                 SortingAct sorting_act_proc = new SortingAct(retrieve_location);
-            } catch (IOException ex) {
+            } catch (SQLException | IOException ex) {
                 Logger.getLogger(SorterProcess.class.getName()).log(Level.SEVERE, null, ex);
             }
         

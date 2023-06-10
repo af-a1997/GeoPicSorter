@@ -175,7 +175,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="rows" type="int" value="5"/>
-                    <Property name="text" type="java.lang.String" value="Geoapify Geocoding API &lt;https://www.geoapify.com/&gt;&#xa;Google Maps Geocoding API &lt;https://developers.google.com/maps/documentation/geocoding/start#reverse&gt;&#xa;Metadata-extractor &lt;https://github.com/drewnoakes/metadata-extractor&gt;&#xa;JDBC &lt;https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc&gt;&#xa;OkHttp &lt;https://square.github.io/okhttp/&gt;&#xa;org.json &lt;https://mvnrepository.com/artifact/org.json/json&gt;&#xa;Apache Commons &lt;https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar&gt;&#xa;zip4j &lt;https://github.com/srikanth-lingala/zip4j&gt;"/>
+                    <Property name="text" type="java.lang.String" value="Geoapify Reverse Geocoding API &lt;https://www.geoapify.com/reverse-geocoding-api&gt;&#xa;LocationIQ &lt;https://docs.locationiq.com/#reverse-geocoding&gt;&#xa;Metadata-extractor &lt;https://github.com/drewnoakes/metadata-extractor&gt;&#xa;JDBC &lt;https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc&gt;&#xa;OkHttp &lt;https://square.github.io/okhttp/&gt;&#xa;org.json &lt;https://mvnrepository.com/artifact/org.json/json&gt;&#xa;Apache Commons &lt;https://search.maven.org/artifact/commons-io/commons-io/2.11.0/jar&gt;&#xa;zip4j &lt;https://github.com/srikanth-lingala/zip4j&gt;"/>
                   </Properties>
                 </Component>
               </SubComponents>

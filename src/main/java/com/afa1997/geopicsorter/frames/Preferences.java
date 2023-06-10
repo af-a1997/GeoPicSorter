@@ -17,6 +17,14 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// Used for pasting feature (to quickly paste API key):
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+
+// Exceptions:
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+
 // GUI class for user preferences, to customize GeoPicSorter's behavior, appearance, etc.
 public class Preferences extends javax.swing.JFrame {
     Connection conn_settings_db;
@@ -87,6 +95,7 @@ public class Preferences extends javax.swing.JFrame {
         pref_org_jl_api_key_expl = new javax.swing.JLabel();
         pref_org_txf_api_key_in = new javax.swing.JTextField();
         pref_org_jb_help_get_api_key = new javax.swing.JButton();
+        pref_org_jb_help_paste_api_key = new javax.swing.JButton();
         pref_container_btns = new javax.swing.JPanel();
         pref_canc = new javax.swing.JButton();
         pref_save = new javax.swing.JButton();
@@ -187,6 +196,14 @@ public class Preferences extends javax.swing.JFrame {
             }
         });
 
+        pref_org_jb_help_paste_api_key.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_paste.png"))); // NOI18N
+        pref_org_jb_help_paste_api_key.setText("Paste key");
+        pref_org_jb_help_paste_api_key.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pref_org_jb_help_paste_api_keyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pref_jtp_orgLayout = new javax.swing.GroupLayout(pref_jtp_org);
         pref_jtp_org.setLayout(pref_jtp_orgLayout);
         pref_jtp_orgLayout.setHorizontalGroup(
@@ -214,8 +231,11 @@ public class Preferences extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pref_jtp_orgLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(pref_jtp_orgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(pref_org_jb_help_get_api_key, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(pref_org_jb_help_sortact, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                    .addComponent(pref_org_jb_help_sortact, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pref_jtp_orgLayout.createSequentialGroup()
+                                        .addComponent(pref_org_jb_help_paste_api_key)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(pref_org_jb_help_get_api_key)))))
                         .addContainerGap())))
         );
         pref_jtp_orgLayout.setVerticalGroup(
@@ -232,7 +252,9 @@ public class Preferences extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pref_org_txf_api_key_in, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pref_org_jb_help_get_api_key)
+                .addGroup(pref_jtp_orgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pref_org_jb_help_get_api_key)
+                    .addComponent(pref_org_jb_help_paste_api_key))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pref_org_ttl_sortact)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -374,17 +396,24 @@ public class Preferences extends javax.swing.JFrame {
 
     // Explain in a new window what are the sorting actions.
     private void pref_org_jb_help_sortactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pref_org_jb_help_sortactActionPerformed
-        SortActExpl i_sae = new SortActExpl();
-        
-        i_sae.setVisible(true);
+        new SortActExpl().setVisible(true);
     }//GEN-LAST:event_pref_org_jb_help_sortactActionPerformed
 
     // Explain in a new window how to get an API key from Geoapify.
     private void pref_org_jb_help_get_api_keyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pref_org_jb_help_get_api_keyActionPerformed
-        GetKey i_gk = new GetKey();
-
-        i_gk.setVisible(true);
+        new GetKey().setVisible(true);
     }//GEN-LAST:event_pref_org_jb_help_get_api_keyActionPerformed
+
+    private void pref_org_jb_help_paste_api_keyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pref_org_jb_help_paste_api_keyActionPerformed
+        try {
+            // See: < https://stackoverflow.com/a/7106086 >.
+            String api_key_from_cb = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        
+            pref_org_txf_api_key_in.setText(api_key_from_cb);
+        } catch (UnsupportedFlavorException | IOException ex) {
+            Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_pref_org_jb_help_paste_api_keyActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -429,6 +458,7 @@ public class Preferences extends javax.swing.JFrame {
     private javax.swing.JLabel pref_jtp_gen_ttl_lang;
     private javax.swing.JPanel pref_jtp_org;
     private javax.swing.JButton pref_org_jb_help_get_api_key;
+    private javax.swing.JButton pref_org_jb_help_paste_api_key;
     private javax.swing.JButton pref_org_jb_help_sortact;
     private javax.swing.JLabel pref_org_jl_api_key_expl;
     private javax.swing.JLabel pref_org_rgapi_desc;

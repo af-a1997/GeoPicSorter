@@ -25,7 +25,7 @@ public class SortingCriteria extends JFrame {
     static Connection conn_settings_db;
     static String destination_dir = "";
     
-    public SortingCriteria() {
+    public SortingCriteria(){
         initComponents();
         
         try {
@@ -40,6 +40,39 @@ public class SortingCriteria extends JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(SortingCriteria.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally {
+            try {
+                conn_settings_db.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(SortingCriteria.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public SortingCriteria(String pictures_destination_path) {
+        initComponents();
+        
+        try {
+            conn_settings_db = DriverManager.getConnection(ShStrings.SETTINGS_DB);
+            
+            Statement st_sorting_pref = conn_settings_db.createStatement();
+            ResultSet get_sorting_pref = st_sorting_pref.executeQuery("SELECT s_value FROM settings WHERE s_key = \"organization_criteria\"");
+            
+            jcb_sort_crit.setSelectedIndex(Integer.parseInt(get_sorting_pref.getString("s_value")));
+        } catch (SQLException ex) {
+            Logger.getLogger(SortingCriteria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            try {
+                conn_settings_db.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(SortingCriteria.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        destination_dir = pictures_destination_path;
+        
+        jtf_outdir_path.setText(destination_dir);
     }
 
     @SuppressWarnings("unchecked")
@@ -130,14 +163,22 @@ public class SortingCriteria extends JFrame {
         jrb_outdir_chosen.setSelected(true);
         jrb_outdir_chosen.setText(OUTDIR_DEF);
         jrb_outdir_chosen.setActionCommand("");
-        jrb_outdir_chosen.setEnabled(false);
         jrb_outdir_chosen.setName("same"); // NOI18N
+        jrb_outdir_chosen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrb_outdir_chosenActionPerformed(evt);
+            }
+        });
 
         jbg_out_dir.add(jrb_outdir_custom);
         jrb_outdir_custom.setText(OUTDIR_OTHER);
         jrb_outdir_custom.setActionCommand("");
-        jrb_outdir_custom.setEnabled(false);
         jrb_outdir_custom.setName("custom"); // NOI18N
+        jrb_outdir_custom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrb_outdir_customActionPerformed(evt);
+            }
+        });
 
         jb_outdir_browse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/stock_open.png"))); // NOI18N
         jb_outdir_browse.setText("Browse...");
@@ -148,7 +189,7 @@ public class SortingCriteria extends JFrame {
             }
         });
 
-        jtf_outdir_path.setEnabled(false);
+        jtf_outdir_path.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,6 +268,11 @@ public class SortingCriteria extends JFrame {
             st_sc_save.addBatch("UPDATE settings SET s_value = \"" + jcb_sort_crit.getSelectedIndex() + "\" WHERE s_key = \"organization_criteria\";");
             st_sc_save.addBatch("UPDATE settings SET s_value = \"" + jck_date_sub_sort.isSelected() + "\" WHERE s_key = \"sub_by_date\";");
             
+            if(jrb_outdir_custom.isSelected())
+                st_sc_save.addBatch("UPDATE settings SET s_value = \"" + destination_dir + "\" WHERE s_key = \"output_dir\";");
+            else
+                st_sc_save.addBatch("UPDATE settings SET s_value = null WHERE s_key = \"output_dir\";");
+            
             st_sc_save.executeBatch();
             
             conn_settings_db.close();
@@ -256,6 +302,15 @@ public class SortingCriteria extends JFrame {
             destination_dir = sel_dir;
         }
     }//GEN-LAST:event_jb_outdir_browseActionPerformed
+
+    // Controls the browse output directory button availability.
+    private void jrb_outdir_customActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrb_outdir_customActionPerformed
+        jb_outdir_browse.setEnabled(true);
+    }//GEN-LAST:event_jrb_outdir_customActionPerformed
+
+    private void jrb_outdir_chosenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrb_outdir_chosenActionPerformed
+        jb_outdir_browse.setEnabled(false);
+    }//GEN-LAST:event_jrb_outdir_chosenActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

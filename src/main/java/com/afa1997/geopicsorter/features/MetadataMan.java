@@ -79,10 +79,9 @@ public class MetadataMan {
 
     // The following two methods are used to get a list of files with one or more extensions. Credit to base code at: < https://mkyong.com/java/how-to-find-files-with-certain-extension-only/ >, I modified it a little to adapt it to GeoPicSorter and return only filenames.
     public static List<String> picturesListGen(Path pictures_loc) throws IOException {
-        if (!Files.isDirectory(pictures_loc)) {
+        if (!Files.isDirectory(pictures_loc))
             throw new IllegalArgumentException("Invalid directory.");
-        }
-
+        
         List<String> temp_list;
         List<String> out_list = new ArrayList<>();
         int file_entry = 0;
@@ -90,7 +89,6 @@ public class MetadataMan {
         try (Stream<Path> walk = Files.walk(pictures_loc, 1)) {
             temp_list = walk
                 .filter(p -> !Files.isDirectory(p))
-                // convert path to string
                 .map(p -> p.toString())
                 .filter(f -> pictureHasValidFormat(f))
                 .collect(Collectors.toList());
@@ -106,8 +104,8 @@ public class MetadataMan {
     }
     private static boolean pictureHasValidFormat(String file) {
         boolean result = false;
-        for (String fileExtension : ShStrings.PICTURE_EXTS) {
-            if (file.endsWith(fileExtension)) {
+        for (String file_ex : ShStrings.PICTURE_EXTS) {
+            if (file.endsWith(file_ex)) {
                 result = true;
                 break;
             }
@@ -126,33 +124,18 @@ public class MetadataMan {
         
         int ft = pictures_fns.size();
         
+        if(ft == 0) return null;
+        
         try{
-            String base_command = "INSERT INTO pictures (location, filename) VALUES (";
-            int detected_pictures = 0;
             store_locations_db = DriverManager.getConnection(ShStrings.METADATA_DB);
-            StringBuilder writing_commands = new StringBuilder();
-            writing_commands.append(base_command);
             
-            // Build the INSERT query to insert various pictures with their locations in one go.
-            for(int x = 0 ; x < ft ; x++){
-                if(x == ft-1)
-                    writing_commands.append("\"").append(pictures_location).append("\\\", \"").append(pictures_fns.get(x)).append("\")");
-                else
-                    writing_commands.append("\"").append(pictures_location).append("\\\", \"").append(pictures_fns.get(x)).append("\"), (");
-                
-                detected_pictures++;
-            }
+            Statement send_location_list_to_db = store_locations_db.createStatement();
             
-            // If at least one picture was detected, write the file names into the database.
-            if(detected_pictures > 0){
-                writing_commands.append(";");
-                
-                Statement write_locations_to_db = store_locations_db.createStatement();
-                write_locations_to_db.executeUpdate(writing_commands.toString());
-            }
-            // TODO: add visual feedback for when no pictures are detected.
-            else
-                System.out.println(ShStrings.SORTING_STATUS_NO_PICS);
+            // Queries for storing the picture names.
+            for(int x = 0 ; x < ft ; x++)
+                send_location_list_to_db.addBatch("INSERT INTO pictures (location, filename) VALUES (\"" +  pictures_location + "\\" + "\", \"" + pictures_fns.get(x) + "\");");
+            
+            send_location_list_to_db.executeBatch();
         } catch(SQLException sql_ex){
             sql_ex.getMessage();
         } finally {
@@ -163,32 +146,32 @@ public class MetadataMan {
     }
     
     // Gets latitude and longitude from each picture and writes it to the database.
-    public List<String[]> MMIF_GetCoords(String pictures_location) throws SQLException {
-        List<String[]> out_list_locs = new ArrayList<>();
+    public int MMIF_GetCoords(String pictures_location) throws SQLException {
+        // Counter used to keep track of geotagged pictures total, if it's zero, the window for starting the sorting process won't open.
+        int geotagged_pictures = 0;
         
         try{
             store_locations_db = DriverManager.getConnection(ShStrings.METADATA_DB);
-            String select_command = "SELECT * FROM pictures;";
             
             // Acquire file names at the database.
+            String select_command = "SELECT * FROM pictures;";
             Statement st_sel_fns = store_locations_db.createStatement();
             ResultSet rs_sel_fns = st_sel_fns.executeQuery(select_command);
             
             // To create UPDATE command batch onto the database.
             Statement st_upd_loc = store_locations_db.createStatement();
             
-            // Try to get latitude and longitude for each picture, and writes them into the database if appliable.
-            String lat = "";
-            String lng = "";
+            String lat, lng;
             
+            // Navigate through the pictures list to attempt getting coordinates that may be present in each of the pictures.
             while(rs_sel_fns.next()){
 		try {
-                    
-                    //File current_picture = new File(pictures_location + rs_sel_fns.getString("filename"));
                     File current_picture = new File(rs_sel_fns.getString("location") + rs_sel_fns.getString("filename"));
+                    
+                    // Get metadata from picture.
 		    md = ImageMetadataReader.readMetadata(current_picture);
                     
-                    // If there's geolocation data, retrieve it:
+                    // If there's geolocation data in the current picture, retrieve it and store it on the database, for use at the sorting process.
                     if(md.containsDirectoryOfType(GpsDirectory.class)){
                         GpsDirectory addr = md.getFirstDirectoryOfType(GpsDirectory.class);
                         
@@ -197,20 +180,12 @@ public class MetadataMan {
 
                             lat = String.valueOf(gl_data.getLatitude());
                             lng = String.valueOf(gl_data.getLongitude());
+                            
+                            st_upd_loc.addBatch("UPDATE pictures SET latitude = " + lat + ", longitude = " + lng + " WHERE id = " + rs_sel_fns.getInt("id") + ";");
+                            
+                            geotagged_pictures++;
                         }
                     }
-                    // Otherwise, send an empty string to indicate the picture has no coordinates registered:
-                    else{
-                        lat = "";
-                        lng = "";
-                    }
-                    
-                    // Add location info to the matching picture in the database, ONLY if both latitude and longitude are present, otherwise keeps the corresponding fields empty, having only one of the parameters makes no sense after all.
-                    if(!lat.isEmpty() && !lng.isEmpty())
-                        st_upd_loc.addBatch("UPDATE pictures SET latitude = " + lat + ", longitude = " + lng + " WHERE id = " + rs_sel_fns.getString("id") + ";");
-                    
-                    String[] out_list_locs_d = {rs_sel_fns.getString("filename"), lat, lng};
-                    out_list_locs.add(out_list_locs_d);
 		} catch (ImageProcessingException | IOException e) {
                     e.getMessage();
 		}
@@ -223,7 +198,6 @@ public class MetadataMan {
             store_locations_db.close();
         }
         
-        // TODO: List is used for first table recreation to show GPS coordinates, probably won't be necessary but it's going to be evaluated.
-        return out_list_locs;
+        return geotagged_pictures;
     }
 }
