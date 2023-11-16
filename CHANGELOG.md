@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+
+* Dependency update in response to security vulnerabilities.
+* Preparations for announcing code re-write (details will be provided on the website and this file), watch the repository if you're interested on updates! (Also, editing the GUI is a hit-and-miss task of labor, you'll spot a minor display error upon opening the software).
+
 ## 1.3.0
 
 * Implemented custom output directory choice, now the user may pick where to output the sorted pictures from the sorting criteria picker. This preference **isn't** remembered.

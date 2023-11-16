@@ -44,6 +44,7 @@ public class MainWindow extends JFrame {
         mw_sec_api_key_body = new javax.swing.JLabel();
         mw_sec_api_key_foot = new javax.swing.JLabel();
         mw_btn_prefs = new javax.swing.JButton();
+        mw_foot_note_rebrand = new javax.swing.JLabel();
         mw_mb = new javax.swing.JMenuBar();
         mw_mb_program = new javax.swing.JMenu();
         mw_mb_program_open = new javax.swing.JMenu();
@@ -62,6 +63,7 @@ public class MainWindow extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(ShStrings.PROG_NAME_FULL);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setPreferredSize(new java.awt.Dimension(620, 420));
         setResizable(false);
 
@@ -85,6 +87,9 @@ public class MainWindow extends JFrame {
             }
         });
 
+        mw_foot_note_rebrand.setText("<html>\n<b>Also</b>, the software is being re-written, you'll find more information at the homepage and<br>\nthe repository. I recommend to keep an eye on either site.");
+        mw_foot_note_rebrand.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout mw_jp_containerLayout = new javax.swing.GroupLayout(mw_jp_container);
         mw_jp_container.setLayout(mw_jp_containerLayout);
         mw_jp_containerLayout.setHorizontalGroup(
@@ -98,24 +103,27 @@ public class MainWindow extends JFrame {
                     .addGroup(mw_jp_containerLayout.createSequentialGroup()
                         .addComponent(mw_sec_api_key_foot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mw_btn_prefs)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                        .addComponent(mw_btn_prefs))
+                    .addComponent(mw_foot_note_rebrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mw_jp_containerLayout.setVerticalGroup(
             mw_jp_containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mw_jp_containerLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mw_intro_text, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mw_intro_text, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mw_sec_api_key_ttl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mw_jp_containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(mw_jp_containerLayout.createSequentialGroup()
-                        .addComponent(mw_sec_api_key_ttl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(mw_sec_api_key_body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(mw_sec_api_key_foot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(mw_btn_prefs))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mw_foot_note_rebrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         mw_mb_program.setMnemonic(0);
@@ -205,11 +213,11 @@ public class MainWindow extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mw_jp_container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mw_jp_container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mw_jp_container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(mw_jp_container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -370,6 +378,7 @@ public class MainWindow extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton mw_btn_prefs;
+    private javax.swing.JLabel mw_foot_note_rebrand;
     private javax.swing.JLabel mw_intro_text;
     private javax.swing.JPanel mw_jp_container;
     private javax.swing.JMenuBar mw_mb;
