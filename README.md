@@ -1,4 +1,4 @@
-> :warning: Repository will soon be archived, the code is being re-written, read [below](#🔃-code-re-write-and-rebrand) for more information!
+> :warning: Repository will soon be archived, the code is being re-written, read [below](#arrows_clockwise-code-re-write-and-rebrand) for more information!
 
 # GeoPicSorter
 > :round_pushpin: Geotagged picture organizer based on location groups.
